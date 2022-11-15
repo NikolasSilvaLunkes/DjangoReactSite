@@ -1,6 +1,10 @@
 from rest_framework import serializers
-from .models import Room
+from .models import Room, Comment
 
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ('name','comment')
 
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:

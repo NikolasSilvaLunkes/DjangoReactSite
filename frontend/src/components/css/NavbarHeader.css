@@ -48,6 +48,7 @@
 
 .nav-links i {
   padding-right: 00px;
+  transition: all 0.2s ease-in-out;
 }
 
 .nav-links:hover {
@@ -70,6 +71,7 @@ button:hover {
   background-color: #151516;
   color: #fff;
   padding: 1.1rem 1.8rem;
+  transition: all 0.2s ease-in-out;
 }
 
 .fa-bars {
@@ -108,6 +110,7 @@ button:hover {
     align-items: stretch;
     padding: 80px 0 30px 0;
     margin: 0;
+    transition: 0.2s  !important;
   }
 
   .nav-menu.active {
@@ -115,12 +118,14 @@ button:hover {
     opacity: 1;
     transition: all 0.3s ease;
     z-index: -1;
+    transition: 0.2s  !important;
   }
 
   .nav-links {
     display: block;
     width: 100%;
     padding: 2rem 0;
+    transition: 0.2s  !important;
   }
 
   .nav-links:hover {
@@ -128,7 +133,7 @@ button:hover {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-radius: 0;
-    transition: none;
+    transition: 0.2s  !important;
   }
 
   .menu-icons {

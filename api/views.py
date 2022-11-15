@@ -1,13 +1,86 @@
 from django.shortcuts import render
 from rest_framework import generics, status
-from .serializers import RoomSerializer, CreateRoomSerializer
-from .models import Room
+from .serializers import RoomSerializer, CreateRoomSerializer, CommentSerializer
+from .models import Room, Comment
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.http import JsonResponse
+from tabulate import tabulate
+
+
+
+
 
 
 # Create your views here.
 
+class UserInRoom(APIView):
+    def get(self, request, format=None):
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+
+        data = {
+            'code': self.request.session.get('room_code')
+        }
+        return JsonResponse(data, status=status.HTTP_200_OK)
+
+class GetComments(APIView):
+    serializer_class = CommentSerializer
+
+    
+
+    def get(self, request, format=None):
+        
+        
+        serializers = []
+
+        queryset = Comment.objects.all()
+
+        if not queryset.exists():
+                return Response({'msg': 'Room not found.'}, status=status.HTTP_404_NOT_FOUND)
+        
+        #comment = queryset[0]
+        
+        data = {}
+        
+        i=0
+        for comment in queryset:
+            commentData = {
+                'name': comment.name,
+                'comment': comment.comment
+            }
+            data[i] = commentData
+            i+=1
+
+        
+        return JsonResponse(data, status=status.HTTP_200_OK)
+
+        
+    
+        
+
+class SubmitComment(APIView):
+    serializer_class = CommentSerializer
+
+    def post(self, request, format=None):
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            name = serializer.data.get('name')
+            comment = serializer.data.get('comment')
+
+            comment = Comment(name=name, comment=comment)
+            comment.save()
+            return Response(CommentSerializer(comment).data, status=status.HTTP_201_CREATED)
+
+        return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CommentView(generics.ListAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
 
 class RoomView(generics.ListAPIView):
     queryset = Room.objects.all()
