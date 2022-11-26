@@ -76,6 +76,22 @@ class SubmitComment(APIView):
             return Response(CommentSerializer(comment).data, status=status.HTTP_201_CREATED)
 
         return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
+    
+class DeleteComment(APIView):
+    serializer_class = CommentSerializer
+    
+    def post(self, request, format=None):
+        
+        
+        queryset = Comment.objects.all()
+
+        i=0
+        for comment in queryset:
+            Comment.delete(comment)
+            i+=1
+        return Response(status=status.HTTP_201_CREATED)
+
+        return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CommentView(generics.ListAPIView):
